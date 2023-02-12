@@ -83,4 +83,4 @@ jobs:
       # Runs a single command using the runners shell
       - name: Check the output directory
         run: |
-          find -maxdepth 3
+          cd artifacts && find -maxdepth 10
