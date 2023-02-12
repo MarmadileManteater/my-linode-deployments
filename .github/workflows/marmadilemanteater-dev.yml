@@ -36,7 +36,7 @@ jobs:
       - name: 🤐 Unzip FT Cordova artifact 
         uses: montudor/action-zip@v1
         with:
-          args: unzip -qq ftc.zip -d ./artifacts/freetube
+          args: unzip -qq ftc -d ./artifacts/freetube
 
       - name: ⬇ Download SimpleReverseProxy artifact
         uses: dawidd6/action-download-artifact@v2
