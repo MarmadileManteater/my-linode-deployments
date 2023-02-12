@@ -51,9 +51,11 @@ jobs:
       - name: 🤐 Unzip FreeTubeCordova artifact 
         run: |
           unzip -qq ./ftc.zip -d ./artifacts/public/freetube
+          
       - name: Make hrefs in FTcordova absolute links
         run: |
           sed -i -e 's@href="@href="/freetube/@g' ./artifacts/public/freetube/index.html
+          sed -i -e 's@src="@src="/freetube/@g' ./artifacts/public/freetube/index.html
           
       - name: ⬇ Download SvelteKitSite artifact 
         uses: dawidd6/action-download-artifact@v2
