@@ -137,7 +137,7 @@ jobs:
           
       - name: 🔓 Allow simple_rust_site to be executed
         run: |
-          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'cd marmadilemanteateater.dev && chmod +x simple_rust_site'
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'cd marmadilemanteater.dev && chmod +x simple_rust_site'
        
       - name: ✨ Start tmux session for SvelteKitSite
         run: |
