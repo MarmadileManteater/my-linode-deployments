@@ -26,15 +26,6 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      
-      - name: Get the latest FT Cordova release
-        run: |
-          FT_DOWNLOAD_URL=$(curl --request GET --url "https://api.github.com/repos/MarmadileManteater/FreeTubeCordova/releases" --header "Authorization: Bearer ${{ secrets.PERSONAL_ACCESS_TOKEN }}" | jq '.[0].assets[1].browser_download_url')
-          curl -L --request GET --url ${FT_DOWNLOAD_URL:1:-1} --header "Authorization: Bearer ${{ secrets.PERSONAL_ACCESS_TOKEN }}" -o ftc.zip
-
-      - name: 🤐 Unzip FreeTubeCordova artifact 
-        run:
-          unzip -qq ./ftc.zip -d ./artifacts/freetube
 
       - name: ⬇ Download SimpleReverseProxy artifact
         uses: dawidd6/action-download-artifact@v2
@@ -51,7 +42,16 @@ jobs:
           search_artifacts: false
           skip_unpack: false
           if_no_artifact_found: fail
-      
+          
+      - name: Get the latest FT Cordova release
+        run: |
+          FT_DOWNLOAD_URL=$(curl --request GET --url "https://api.github.com/repos/MarmadileManteater/FreeTubeCordova/releases" --header "Authorization: Bearer ${{ secrets.PERSONAL_ACCESS_TOKEN }}" | jq '.[0].assets[1].browser_download_url')
+          curl -L --request GET --url ${FT_DOWNLOAD_URL:1:-1} --header "Authorization: Bearer ${{ secrets.PERSONAL_ACCESS_TOKEN }}" -o ftc.zip
+
+      - name: 🤐 Unzip FreeTubeCordova artifact 
+        run:
+          unzip -qq ./ftc.zip -d ./artifacts/freetube
+          
       - name: ⬇ Download SvelteKitSite artifact 
         uses: dawidd6/action-download-artifact@v2
         with:
