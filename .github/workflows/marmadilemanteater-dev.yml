@@ -29,10 +29,6 @@ jobs:
       
       - name: Get the latest FT Cordova release
         run: |
-          sudo apt-get install jq
-      
-      - name: Get the latest FT Cordova release
-        run: |
           curl -o ftc.zip $(curl --request GET --url "https://api.github.com/repos/MarmadileManteater/FreeTubeCordova/releases" --header "Authorization: Bearer ${{ secrets.PERSONAL_ACCESS_TOKEN }}" | jq '.[0].assets[1].browser_download_url')
 
       - name: 🤐 Unzip FT Cordova artifact 
