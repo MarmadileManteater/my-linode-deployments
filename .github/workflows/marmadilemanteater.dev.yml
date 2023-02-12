@@ -111,7 +111,7 @@ jobs:
         with:
           args: zip -r artifacts.zip ./artifacts
           
-      - name: 🏗Install SSH Key
+      - name: 🏗 Install SSH Key
         uses: shimataro/ssh-key-action@v2
         with:
           key: ${{ secrets.SSH_PRIVATE_KEY }} 
@@ -120,6 +120,26 @@ jobs:
       - name: Add known hosts
         run: ssh-keyscan -H ${{ secrets.LINODE_IP_ADDRESS }} >> ~/.ssh/known_hosts
         
-      - name: 🚀Deploy with scp
+      - name: 🚀 Deploy with scp
         run: scp artifacts.zip ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }}:~/
-    
+      
+      - name: 🪓 Kill any running tmux sessions on my linode
+        run: |
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'tmux kill-session -tsvelte-kit-site'
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'tmux kill-session -tsimple-rust-site'
+       
+      - name: 🤐 Unzip the artifacts on my linode
+        run: |
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'unzip -qq artifacts.zip -d marmadilemanteater.dev'
+       
+      - name: ✨ Start tmux session for SvelteKitSite
+        run: |
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux new -s svelete-kit-site"
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsvelete-kit-site 'cd marmadilemanteater.dev/sveltekitsite' Enter"
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsvelete-kit-site 'node .' Enter" 
+          
+      - name: ✨ Start tmux session for SimpleReverseProxy
+        run: |
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux new -s simple-rust-site"
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsvelete-kit-site 'cd marmadilemanteater.dev' Enter"
+          echo "${{ secrets.SUDO_PASSWORD }}" | ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsvelete-kit-site 'sudo ./simple_rust_site ../fullchain.pem ../privkey.pem ./data.json' Enter" 
