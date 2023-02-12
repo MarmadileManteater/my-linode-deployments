@@ -137,7 +137,7 @@ jobs:
        
       - name: ✨ Start tmux session for SvelteKitSite
         run: |
-          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux new -d -s svelete-kit-site"
+          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux new -d -s svelte-kit-site"
           ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsvelte-kit-site 'cd marmadilemanteater.dev/sveltekitsite' Enter"
           ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsvelte-kit-site 'node .' Enter" 
           
@@ -145,4 +145,4 @@ jobs:
         run: |
           ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux new -d -s simple-rust-site"
           ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsvelte-kit-site 'cd marmadilemanteater.dev' Enter"
-          echo "${{ secrets.SUDO_PASSWORD }}" | ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsvelete-kit-site 'sudo ./simple_rust_site ../fullchain.pem ../privkey.pem ./data.json' Enter" 
+          echo "${{ secrets.SUDO_PASSWORD }}" | ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsvelte-kit-site 'sudo ./simple_rust_site ../fullchain.pem ../privkey.pem ./data.json' Enter" 
