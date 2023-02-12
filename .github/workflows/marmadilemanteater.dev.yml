@@ -86,7 +86,7 @@ jobs:
 
       - name: Rename artifact folder
         run: |
-          mv ./dist ./artifacts/public/qwik
+          mv -r ./dist/* ./artifacts/public/qwik
 
       - name: ⬇ Download AstroVueStaticSite artifact 
         uses: dawidd6/action-download-artifact@v2
@@ -108,7 +108,7 @@ jobs:
           
       - name: Rename artifact folder
         run: |
-          mv ./dist ./artifacts/public/astro
+          mv -r ./dist/* ./artifacts/public/astro
 
       - name: 🚚 Move data.json to artifact folder
         run: |
