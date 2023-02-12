@@ -83,11 +83,11 @@ jobs:
       - name: 🤐 Unzip QwikStaticSite artifact 
         uses: montudor/action-zip@v1
         with:
-          args: unzip -qq MarmadileManteaterQwik/dist.zip -d ./artifacts/public/dist
+          args: unzip -qq MarmadileManteaterQwik/dist.zip -d .
 
       - name: Rename artifact folder
         run: |
-          mv ./artifacts/public/dist ./artifacts/public/qwik
+          mv ./dist ./artifacts/public/qwik
 
       - name: ⬇ Download AstroVueStaticSite artifact 
         uses: dawidd6/action-download-artifact@v2
@@ -106,11 +106,11 @@ jobs:
       - name: 🤐 Unzip AstroVueStaticSite artifact 
         uses: montudor/action-zip@v1
         with:
-          args: unzip -qq MarmadileManteaterAstroVue/dist.zip -d ./artifacts/public/
+          args: unzip -qq MarmadileManteaterAstroVue/dist.zip -d .
           
       - name: Rename artifact folder
         run: |
-          mv ./artifacts/public/dist ./artifacts/public/astro
+          mv ./dist ./artifacts/public/astro
 
       - name: 🚚 Move data.json to artifact folder
         run: |
@@ -144,6 +144,7 @@ jobs:
           ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'rm marmadilemanteater.dev -r'
           ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'unzip -qq artifacts.zip -d .'
           ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'mv artifacts marmadilemanteater.dev'
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'rm artifacts.zip'
           
       - name: 🔓 Allow simple_rust_site to be executed
         run: |
