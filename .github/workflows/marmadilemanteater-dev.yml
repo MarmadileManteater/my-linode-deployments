@@ -26,21 +26,19 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+      
+      - name: Get the latest FT Cordova release
+        run: |
+          FT_DOWNLOAD_URL=$(curl --request GET
+          --url "https://api.github.com/repos/MarmadileManteater/FreeTubeCordova/releases"
+          --header "Authorization: Bearer ${{ secrets.PERSONAL_ACCESS_TOKEN }}" | jq '.[0].assets[1].browser_download_url')
+          curl -o ftc.zip $FT_DOWNLOAD_URL
 
-      - name: ⬇ Download FreeTubeCordova artifact
-        uses: dawidd6/action-download-artifact@v2
-        with: 
-          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          workflow: releaseCordova.yml 
-          workflow_conclusion: success
-          branch: development
-          path: ./artifacts/
-          repo: MarmadileManteater/FreeTubeCordova
-          check_artifacts:  false
-          search_artifacts: false
-          skip_unpack: false
-          if_no_artifact_found: fail
- 
+      - name: 🤐 Unzip FT Cordova artifact 
+        uses: montudor/action-zip@v1
+        with:
+          args: unzip -qq ftc.zip -d ./artifacts/freetube
+
       - name: ⬇ Download SimpleReverseProxy artifact
         uses: dawidd6/action-download-artifact@v2
         with:
