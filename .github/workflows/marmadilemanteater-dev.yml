@@ -151,9 +151,9 @@ jobs:
           ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'rm marmadilemanteater.dev -r'
           ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'unzip -qq artifacts.zip -d .'
           ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'mv artifacts marmadilemanteater.dev'
-          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'ln -s marmadilemanteater.dev/public/freetube/ marmadilemanteater.dev/public/qwik/freetube'
-          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'ln -s marmadilemanteater.dev/public/freetube/ marmadilemanteater.dev/public/astro/freetube'
-          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'ln -s marmadilemanteater.dev/public/freetube/ marmadilemanteater.dev/sveltekitsite/client/freetube'
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'ln -s ~/marmadilemanteater.dev/public/freetube/ ~/marmadilemanteater.dev/public/qwik/freetube'
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'ln -s ~/marmadilemanteater.dev/public/freetube/ ~/marmadilemanteater.dev/public/astro/freetube'
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'ln -s ~/marmadilemanteater.dev/public/freetube/ ~/marmadilemanteater.dev/sveltekitsite/client/freetube'
           ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'rm artifacts.zip'
           
       - name: 🔓 Allow simple_rust_site to be executed
