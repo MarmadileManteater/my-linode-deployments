@@ -49,9 +49,10 @@ jobs:
           curl -L --request GET --url ${FT_DOWNLOAD_URL:1:-1} --header "Authorization: Bearer ${{ secrets.PERSONAL_ACCESS_TOKEN }}" -o ftc.zip
 
       - name: 🤐 Unzip FreeTubeCordova artifact 
-        run:
+        run: |
           unzip -qq ./ftc.zip -d ./artifacts/public/freetube
       - name: Make hrefs in FTcordova absolute links
+        run: |
           sed -i -e 's@href="@href="/freetube/@g' ./artifacts/public/freetube/index.html
           
       - name: ⬇ Download SvelteKitSite artifact 
