@@ -10,6 +10,11 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+# Allow one concurrent deployment
+concurrency:
+  group: "marmadilemanteater-dev"
+  cancel-in-progress: true
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -89,6 +94,23 @@ jobs:
           skip_unpack: false
           if_no_artifact_found: fail
           
+      - name: 🤐 Zip up artifacts directory for 🏎faster uploads
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -r artifacts.zip ./artifacts
+          
+      - name: 🏗Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }} 
+          known_hosts: 'just-a-placeholder'
+    
+      - name: Add known hosts
+        run: ssh-keyscan -H ${{ secrets.LINODE_IP_ADDRESS }} >> ~/.ssh/known_hosts
+        
+      - name: 🚀Deploy with scp
+        run: scp artifacts.zip ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }}:~/artifacts/
+    
       # Runs a single command using the runners shell
       - name: 👁 Check the output directory
         run: |
