@@ -73,16 +73,17 @@ jobs:
           workflow: main.yml 
           workflow_conclusion: success
           branch: development
-          path: ./artifacts/public/
+          path: .
           repo: MarmadileManteater/QwikStaticSite
           check_artifacts:  false
           search_artifacts: false
           skip_unpack: false
           if_no_artifact_found: fail
 
-      - name: Rename qwik artifact folder
-        run: |
-          mv ./artifacts/public/MarmadileManteaterQwik ./artifacts/public/qwik
+      - name: 🤐 Unzip QwikStaticSite artifact 
+        uses: montudor/action-zip@v1
+        with:
+          args: unzip -qq MarmadileManteaterQwik/build.zip -d ./artifacts/public/qwik
 
       - name: ⬇ Download AstroVueStaticSite artifact 
         uses: dawidd6/action-download-artifact@v2
@@ -91,16 +92,17 @@ jobs:
           workflow: main.yml 
           workflow_conclusion: success
           branch: development
-          path: ./artifacts/public
+          path: .
           repo: MarmadileManteater/AstroVueStaticSite
           check_artifacts:  false
           search_artifacts: false
           skip_unpack: false
           if_no_artifact_found: fail
           
-      - name: Rename astro artifact folder
-        run: |
-          mv ./artifacts/public/MarmadileManteaterAstroVue ./artifacts/public/astro
+      - name: 🤐 Unzip AstroVueStaticSite artifact 
+        uses: montudor/action-zip@v1
+        with:
+          args: unzip -qq MarmadileManteaterAstroVue/build.zip -d ./artifacts/public/qwik
 
       - name: 🚚 Move data.json to artifact folder
         run: |
