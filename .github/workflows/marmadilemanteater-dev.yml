@@ -30,8 +30,8 @@ jobs:
       - name: Get the latest FT Cordova release
         run: |
           echo "$(curl --request GET --url "https://api.github.com/repos/MarmadileManteater/FreeTubeCordova/releases" --header "Authorization: Bearer ${{ secrets.PERSONAL_ACCESS_TOKEN }}" | jq '.[0].assets[1].browser_download_url')" >> ftcdownloadurl.txt
-          echo "$(cat ftcdownloadurl.txt)"
-          curl -o ftc.zip --request GET --url "$(cat ftcdownloadurl.txt)"
+          echo $(cat ftcdownloadurl.txt)
+          curl -o ftc.zip --request GET --url $(cat ftcdownloadurl.txt)
 
       - name: 🤐 Unzip FT Cordova artifact 
         uses: montudor/action-zip@v1
