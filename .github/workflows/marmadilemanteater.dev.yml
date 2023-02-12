@@ -102,7 +102,7 @@ jobs:
       - name: 🤐 Unzip AstroVueStaticSite artifact 
         uses: montudor/action-zip@v1
         with:
-          args: unzip -qq MarmadileManteaterAstroVue/dist.zip -d ./artifacts/public/qwik
+          args: unzip -qq MarmadileManteaterAstroVue/dist.zip -d ./artifacts/public/astro
 
       - name: 🚚 Move data.json to artifact folder
         run: |
