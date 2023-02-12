@@ -151,5 +151,4 @@ jobs:
           ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsimple-rust-site 'cd marmadilemanteater.dev' Enter"
           # this is a little hacky, but it is important to note I am avoiding accidentally storing the agent's password in `.bash_history` by putting a space before the commands
           ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} " echo \"'${{ secrets.SUDO_PASSWORD }}\" >> password.txt "
-          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'tmux send-keys -tsimple-rust-site " sudo -S <<< \"\$(cat ../password.txt)\" ./simple_rust_site ../fullchain.pem ../privkey.pem ./data.json" Enter'
-          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "rm password.txt"
+          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'tmux send-keys -tsimple-rust-site " sudo -S <<< \"\$(cat ../password.txt)\" ./simple_rust_site ../fullchain.pem ../privkey.pem ./data.json" Enter && rm password.txt'
