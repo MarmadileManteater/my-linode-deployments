@@ -134,6 +134,9 @@ jobs:
           ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'rm marmadilemanteater.dev -r'
           ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'unzip -qq artifacts.zip -d .'
           ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'mv artifacts marmadilemanteater.dev'
+          
+      - name: 🔓 Allow simple_rust_site to be executed
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'cd marmadilemanteateater.dev && chmod +x simple_rust_site'
        
       - name: ✨ Start tmux session for SvelteKitSite
         run: |
