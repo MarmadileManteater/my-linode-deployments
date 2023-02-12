@@ -30,6 +30,8 @@ jobs:
           workflow_conclusion: success
           branch: development
           path: ./artifacts/
+          # only download the version built for OpenSSL 1.1.1f because it is what I am running on my linode
+          name: SimpleReverseProxy-openssl1.1.1f.zip
           repo: MarmadileManteater/SimpleReverseProxy
           check_artifacts:  false
           search_artifacts: false
