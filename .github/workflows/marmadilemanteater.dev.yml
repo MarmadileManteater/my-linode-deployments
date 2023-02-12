@@ -135,12 +135,12 @@ jobs:
        
       - name: ✨ Start tmux session for SvelteKitSite
         run: |
-          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux new -s svelete-kit-site"
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux new -d -s svelete-kit-site"
           ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsvelete-kit-site 'cd marmadilemanteater.dev/sveltekitsite' Enter"
           ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsvelete-kit-site 'node .' Enter" 
           
       - name: ✨ Start tmux session for SimpleReverseProxy
         run: |
-          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux new -s simple-rust-site"
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux new -d -s simple-rust-site"
           ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsvelete-kit-site 'cd marmadilemanteater.dev' Enter"
           echo "${{ secrets.SUDO_PASSWORD }}" | ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsvelete-kit-site 'sudo ./simple_rust_site ../fullchain.pem ../privkey.pem ./data.json' Enter" 
