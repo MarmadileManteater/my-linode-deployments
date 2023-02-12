@@ -145,4 +145,4 @@ jobs:
         run: |
           ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux new -d -s simple-rust-site"
           ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsvelte-kit-site 'cd marmadilemanteater.dev' Enter"
-          echo "${{ secrets.SUDO_PASSWORD }}" | ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsimple-rust-site 'sudo -S ./simple_rust_site ../fullchain.pem ../privkey.pem ./data.json' Enter" 
+          echo "${{ secrets.SUDO_PASSWORD }}" | ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsimple-rust-site 'sudo --prompt="" -S ./simple_rust_site ../fullchain.pem ../privkey.pem ./data.json' Enter" 
