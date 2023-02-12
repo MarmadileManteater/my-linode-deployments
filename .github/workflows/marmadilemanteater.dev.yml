@@ -22,7 +22,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      - name: Download SimpleReverseProxy artifact
+      - name: ⬇ Download SimpleReverseProxy artifact
         uses: dawidd6/action-download-artifact@v2
         with:
           github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
@@ -38,21 +38,26 @@ jobs:
           skip_unpack: false
           if_no_artifact_found: fail
           
-      - name: Download SvelteKitSite artifact 
+      - name: ⬇ Download SvelteKitSite artifact 
         uses: dawidd6/action-download-artifact@v2
         with:
           github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           workflow: main.yml 
           workflow_conclusion: success
           branch: development
-          path: ./artifacts/sveltekitsite
+          path: .
           repo: MarmadileManteater/SvelteKitSite
           check_artifacts:  false
           search_artifacts: false
           skip_unpack: false
           if_no_artifact_found: fail
+      
+      - name: 🤐 Unzip SvelteKitSite artifact 
+        uses: montudor/action-zip@v1
+        with:
+          args: unzip -qq MarmadileManteaterSvelte/build.zip -d ./artifacts/sveltekitsite
 
-      - name: Download QwikStaticSite artifact 
+      - name: ⬇ Download QwikStaticSite artifact 
         uses: dawidd6/action-download-artifact@v2
         with:
           github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
@@ -66,7 +71,7 @@ jobs:
           skip_unpack: false
           if_no_artifact_found: fail
 
-      - name: Download AstroVueStaticSite artifact 
+      - name: ⬇ Download AstroVueStaticSite artifact 
         uses: dawidd6/action-download-artifact@v2
         with:
           github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
@@ -81,6 +86,6 @@ jobs:
           if_no_artifact_found: fail
           
       # Runs a single command using the runners shell
-      - name: Check the output directory
+      - name: 👁 Check the output directory
         run: |
           cd artifacts && find -maxdepth 10
