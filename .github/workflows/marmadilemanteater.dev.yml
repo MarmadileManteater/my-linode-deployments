@@ -35,7 +35,7 @@ jobs:
           repo: MarmadileManteater/SimpleReverseProxy
           check_artifacts:  false
           search_artifacts: false
-          skip_unpack: true
+          skip_unpack: false
           if_no_artifact_found: fail
 
       # Runs a single command using the runners shell
