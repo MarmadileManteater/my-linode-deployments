@@ -109,9 +109,5 @@ jobs:
         run: ssh-keyscan -H ${{ secrets.LINODE_IP_ADDRESS }} >> ~/.ssh/known_hosts
         
       - name: 🚀Deploy with scp
-        run: scp artifacts.zip ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }}:~/artifacts/
+        run: scp artifacts.zip ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }}:~/
     
-      # Runs a single command using the runners shell
-      - name: 👁 Check the output directory
-        run: |
-          cd artifacts && find -maxdepth 10
