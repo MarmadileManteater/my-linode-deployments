@@ -132,16 +132,17 @@ jobs:
       - name: 🤐 Unzip the artifacts on my linode
         run: |
           ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'rm marmadilemanteater.dev -r'
-          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'unzip -qq artifacts.zip -d marmadilemanteater.dev'
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'unzip -qq artifacts.zip -d .'
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'mv artifacts marmadilemanteater.dev'
        
       - name: ✨ Start tmux session for SvelteKitSite
         run: |
-          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux new -d -s svelete-kit-site"
-          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsvelete-kit-site 'cd marmadilemanteater.dev/sveltekitsite' Enter"
-          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsvelete-kit-site 'node .' Enter" 
+          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux new -d -s svelete-kit-site"
+          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsvelete-kit-site 'cd marmadilemanteater.dev/sveltekitsite' Enter"
+          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsvelete-kit-site 'node .' Enter" 
           
       - name: ✨ Start tmux session for SimpleReverseProxy
         run: |
-          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux new -d -s simple-rust-site"
-          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsvelete-kit-site 'cd marmadilemanteater.dev' Enter"
+          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux new -d -s simple-rust-site"
+          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsvelete-kit-site 'cd marmadilemanteater.dev' Enter"
           echo "${{ secrets.SUDO_PASSWORD }}" | ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsvelete-kit-site 'sudo ./simple_rust_site ../fullchain.pem ../privkey.pem ./data.json' Enter" 
