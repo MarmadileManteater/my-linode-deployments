@@ -124,6 +124,7 @@ jobs:
         run: scp artifacts.zip ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }}:~/
       
       - name: 🪓 Kill any running tmux sessions on my linode
+        continue-on-error: true
         run: |
           ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'tmux kill-session -tsvelte-kit-site'
           ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'tmux kill-session -tsimple-rust-site'
