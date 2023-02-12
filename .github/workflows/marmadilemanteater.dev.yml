@@ -83,7 +83,11 @@ jobs:
       - name: 🤐 Unzip QwikStaticSite artifact 
         uses: montudor/action-zip@v1
         with:
-          args: unzip -qq MarmadileManteaterQwik/dist.zip -d ./artifacts/public/qwik
+          args: unzip -qq MarmadileManteaterQwik/dist.zip -d ./artifacts/public/dist
+
+      - name: Rename artifact folder
+        run: |
+          mv ./artifacts/public/dist ./artifacts/public/qwik
 
       - name: ⬇ Download AstroVueStaticSite artifact 
         uses: dawidd6/action-download-artifact@v2
@@ -102,7 +106,11 @@ jobs:
       - name: 🤐 Unzip AstroVueStaticSite artifact 
         uses: montudor/action-zip@v1
         with:
-          args: unzip -qq MarmadileManteaterAstroVue/dist.zip -d ./artifacts/public/astro
+          args: unzip -qq MarmadileManteaterAstroVue/dist.zip -d ./artifacts/public/
+          
+      - name: Rename artifact folder
+        run: |
+          mv ./artifacts/public/dist ./artifacts/public/astro
 
       - name: 🚚 Move data.json to artifact folder
         run: |
