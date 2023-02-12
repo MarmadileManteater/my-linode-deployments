@@ -131,6 +131,7 @@ jobs:
        
       - name: 🤐 Unzip the artifacts on my linode
         run: |
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'rm marmadilemanteater.dev -r'
           ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'unzip -qq artifacts.zip -d marmadilemanteater.dev'
        
       - name: ✨ Start tmux session for SvelteKitSite
