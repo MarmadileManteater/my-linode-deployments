@@ -30,8 +30,7 @@ jobs:
       - name: Get the latest FT Cordova release
         run: |
           FT_DOWNLOAD_URL=$(curl --request GET --url "https://api.github.com/repos/MarmadileManteater/FreeTubeCordova/releases" --header "Authorization: Bearer ${{ secrets.PERSONAL_ACCESS_TOKEN }}" | jq '.[0].assets[1].browser_download_url')
-          curl -o ./ftc.zip --request GET --url ${FT_DOWNLOAD_URL:1:-1}
-          ls -la
+          curl -L --request GET --url ${FT_DOWNLOAD_URL:1:-1} --header "Authorization: Bearer ${{ secrets.PERSONAL_ACCESS_TOKEN }}"
 
       - name: 🤐 Unzip QwikStaticSite artifact 
         run:
