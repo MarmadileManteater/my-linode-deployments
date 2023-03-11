@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Deploy `marmadilemanteater.dev`
+name: 🚀 Deploy `marmadilemanteater.dev`
 
 # Controls when the workflow will run
 on:
@@ -96,11 +96,11 @@ jobs:
 
       - name: 🤐 Unzip QwikStaticSite artifact 
         run:
-          unzip -qq MarmadileManteaterQwik/dist.zip -d ./dist
+          unzip -qq MarmadileManteaterQwik/marmadilemanteater.dev.zip -d ./dist
 
       - name: Rename artifact folder
         run: |
-          mv ./dist/* ./artifacts/public/qwik
+          mv ./dist ./artifacts/public/qwik
 
       - name: ⬇ Download AstroVueStaticSite artifact 
         uses: dawidd6/action-download-artifact@v2
