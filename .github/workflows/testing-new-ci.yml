@@ -1,0 +1,141 @@
+# This is a basic workflow to help you get started with Actions
+
+name: 👩‍🔬 Test new CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "testing-new-ci" ]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Allow one concurrent deployment
+concurrency:
+  group: "testing-new-ci"
+  cancel-in-progress: true
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - name: ⬇ Download SimpleReverseProxy artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          workflow: main.yml 
+          workflow_conclusion: success
+          branch: development
+          path: ./artifacts/
+          # only download the version built for OpenSSL 1.1.1f because it is what I am running on my linode
+          name: SimpleReverseProxy-openssl1.1.1f
+          repo: MarmadileManteater/SimpleReverseProxy
+          check_artifacts:  false
+          search_artifacts: false
+          skip_unpack: false
+          if_no_artifact_found: fail
+          
+      - name: Get the latest FT Cordova release
+        run: |
+          FT_DOWNLOAD_URL=$(curl --request GET --url "https://api.github.com/repos/MarmadileManteater/FreeTubeCordova/releases" --header "Authorization: Bearer ${{ secrets.PERSONAL_ACCESS_TOKEN }}" | jq '.[0].assets[1].browser_download_url')
+          curl -L --request GET --url ${FT_DOWNLOAD_URL:1:-1} --header "Authorization: Bearer ${{ secrets.PERSONAL_ACCESS_TOKEN }}" -o ftc.zip
+
+      - name: 🤐 Unzip FreeTubeCordova artifact 
+        run: |
+          unzip -qq ./ftc.zip -d ./artifacts/public/freetube
+          
+      - name: Make hrefs in FTcordova absolute links
+        run: |
+          sed -i -e 's@href="@href="/freetube/@g' ./artifacts/public/freetube/index.html
+          sed -i -e 's@src="@src="/freetube/@g' ./artifacts/public/freetube/index.html
+          
+      - name: ⬇ Download SvelteKitSite artifact 
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          workflow: main.yml 
+          workflow_conclusion: success
+          branch: development
+          path: .
+          repo: MarmadileManteater/SvelteKitSite
+          check_artifacts:  false
+          search_artifacts: false
+          skip_unpack: false
+          if_no_artifact_found: fail
+      
+      - name: 🤐 Unzip SvelteKitSite artifact 
+        uses: montudor/action-zip@v1
+        with:
+          args: unzip -qq MarmadileManteaterSvelte/build.zip -d ./artifacts/
+          
+      - name: Rename artifact folder
+        run: |
+          mv ./artifacts/build ./artifacts/sveltekitsite
+
+      - name: ⬇ Download QwikStaticSite artifact 
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          workflow: main.yml 
+          workflow_conclusion: success
+          branch: development
+          path: .
+          repo: MarmadileManteater/QwikStaticSite
+          check_artifacts:  false
+          search_artifacts: false
+          skip_unpack: false
+          if_no_artifact_found: fail
+
+      - name: 🤐 Unzip QwikStaticSite artifact 
+        run:
+          unzip -qq MarmadileManteaterQwik/marmadilemanteater.dev.zip -d ./dist
+
+      - name: Rename artifact folder
+        run: |
+          mv ./dist ./artifacts/public/qwik
+
+      - name: ⬇ Download AstroVueStaticSite artifact 
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          workflow: main.yml 
+          workflow_conclusion: success
+          branch: development
+          path: .
+          repo: MarmadileManteater/AstroVueStaticSite
+          check_artifacts:  false
+          search_artifacts: false
+          skip_unpack: false
+          if_no_artifact_found: fail
+          
+      - name: 🤐 Unzip AstroVueStaticSite artifact 
+        run:
+          unzip -qq MarmadileManteaterAstroVue/dist.zip -d ./dist
+          
+      - name: Rename artifact folder
+        run: |
+          mv ./dist/* ./artifacts/public/astro
+
+      - name: 🚚 Move data.json to artifact folder
+        run: |
+          mv ./marmadilemanteater.dev/data.json ./artifacts/
+
+      - name: 🤐 Zip up artifacts directory for 🏎faster uploads
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -r artifacts.zip ./artifacts
+          
+
+      - name: 📦 Publish marmadilemanteater.dev artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Artifacts
+          path: ./artifacts.zip
