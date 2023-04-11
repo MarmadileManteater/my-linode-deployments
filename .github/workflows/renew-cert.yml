@@ -40,12 +40,12 @@ jobs:
         run: |
           # this is a little hacky, but it is important to note I am avoiding accidentally storing the agent's password in `.bash_history` by putting a space before the commands
           ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} " echo \"${{ secrets.SUDO_PASSWORD }}\" >> password.txt "
-          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} ' sudo -S <<< \"\$(cat password.txt)\" tmux new -d -s certbot && sleep 2s && rm password.txt'
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} ' sudo -S <<< "$(cat password.txt)" tmux new -d -s certbot && sleep 2s && rm password.txt'
 
       - name: ✨ Renew the cert in the tmux session
         run: |
           ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} " echo \"${{ secrets.SUDO_PASSWORD }}\" >> password.txt "
-          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} ' sudo -S <<< \"\$(cat password.txt)\" tmux send-keys -tcertbot "certbot renew --dry-run" Enter'
+          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} ' sudo -S <<< "$(cat password.txt)" tmux send-keys -tcertbot "certbot renew --dry-run" Enter'
       
       - name: ⏱ Wait for renewal to complete
         run: sleep 10m
@@ -53,5 +53,5 @@ jobs:
       - name: ⏬ Exit out of session
         run: |
           ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} " echo \"${{ secrets.SUDO_PASSWORD }}\" >> password.txt "
-          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} ' sudo -S <<< \"\$(cat password.txt)\" tmux send-keys -tcertbot "exit" Enter'
-          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} ' sudo -S <<< \"\$(cat password.txt)\" tmux kill-session -tcertbot'
+          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} ' sudo -S <<< "$(cat password.txt)" tmux send-keys -tcertbot "exit" Enter'
+          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} ' sudo -S <<< "$(cat password.txt)" tmux kill-session -tcertbot'
