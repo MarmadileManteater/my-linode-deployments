@@ -1,0 +1,38 @@
+# This is a basic workflow to help you get started with Actions
+
+name: ✨ Renew cert with certbot
+
+# Controls when the workflow will run
+on:
+  schedule:
+    - cron: "0 0 31 * *"
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Allow one concurrent deployment
+concurrency:
+  group: "update-cert"
+  cancel-in-progress: true
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - name: 🎁 Attempt to create a new tmux session with the certbot name
+        continue-on-error: true
+        run: |
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'tmux new -d -s certbot'
+
+      - name: ✨ Start tmux session for SimpleReverseProxy
+        run: |
+          # this is a little hacky, but it is important to note I am avoiding accidentally storing the agent's password in `.bash_history` by putting a space before the commands
+          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} " echo \"${{ secrets.SUDO_PASSWORD }}\" >> password.txt "
+          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'tmux send-keys -tcertbot " sudo -S <<< \"\$(cat ../password.txt)\" certbot renew --dry-run" Enter && sleep 2s && rm password.txt'
