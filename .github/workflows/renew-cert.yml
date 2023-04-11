@@ -48,7 +48,7 @@ jobs:
           ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} ' sudo -S <<< "$(cat password.txt)" tmux send-keys -tcertbot "certbot renew --dry-run" Enter'
       
       - name: ⏱ Wait for renewal to complete
-        run: sleep 10m
+        run: sleep 1m
         
       - name: ⏬ Exit out of session
         run: |
