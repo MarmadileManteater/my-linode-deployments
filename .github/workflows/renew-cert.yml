@@ -38,11 +38,11 @@ jobs:
       - name: 🎁 Attempt to create a new tmux session with the certbot name
         continue-on-error: true
         run: |
-          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} ' sudo -S <<< "${{ secrets.SUDO_PASSWORD }}" tmux new -d -s certbot && sleep 2s && rm password.txt'
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} ' sudo -S <<< "${{ secrets.SUDO_PASSWORD }}" tmux new -d -s certbot'
 
       - name: ✨ Renew the cert in the tmux session
         run: |
-          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} ' sudo -S <<< "${{ secrets.SUDO_PASSWORD }}" tmux send-keys -tcertbot "certbot renew --dry-run" Enter && rm password.txt'
+          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} ' sudo -S <<< "${{ secrets.SUDO_PASSWORD }}" tmux send-keys -tcertbot "certbot renew --dry-run" Enter'
       
       - name: ⏱ Wait for renewal to complete
         run: sleep 1m
