@@ -80,6 +80,7 @@ jobs:
         run: |
           sudo chown -R $(whoami) .
           mv ./artifacts/static-adapter ./artifacts/public/sveltekitsite
+          cp -r ./artifacts/public/freetube ./artifacts/public/sveltekitsite/
 
       - name: 🚚 Move data.json to artifact folder
         run: |
