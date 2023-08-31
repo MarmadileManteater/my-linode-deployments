@@ -59,24 +59,26 @@ jobs:
       - name: ⬇ Download SvelteKitSite artifact 
         uses: dawidd6/action-download-artifact@v2
         with:
-          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           workflow: main.yml 
           workflow_conclusion: success
           branch: development
           path: .
+          name: MarmadileManteaterSvelteStatic
           repo: MarmadileManteater/SvelteKitSite
           check_artifacts:  false
           search_artifacts: false
           skip_unpack: false
           if_no_artifact_found: fail
-          
+
       - name: 🤐 Unzip SvelteKitSite artifact 
         uses: montudor/action-zip@v1
         with:
-          args: unzip -qq MarmadileManteaterSvelteStatic/static-adapter.zip -d ./artifacts/
+          args: unzip -qq static-adapter.zip -d ./artifacts/
           
       - name: Rename artifact folder
         run: |
+          sudo chown -R $(whoami) .
           mv ./artifacts/static-adapter ./artifacts/public/sveltekitsite
 
       - name: 🚚 Move data.json to artifact folder
