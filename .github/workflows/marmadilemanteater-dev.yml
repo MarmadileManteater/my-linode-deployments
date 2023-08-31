@@ -64,12 +64,12 @@ jobs:
           workflow_conclusion: success
           branch: development
           path: .
-          repo: MarmadileManteater/SvelteKitSiteStatic
+          repo: MarmadileManteater/SvelteKitSite
           check_artifacts:  false
           search_artifacts: false
           skip_unpack: false
           if_no_artifact_found: fail
-      
+          
       - name: 🤐 Unzip SvelteKitSite artifact 
         uses: montudor/action-zip@v1
         with:
