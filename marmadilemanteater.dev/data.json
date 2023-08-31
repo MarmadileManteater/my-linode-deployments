@@ -1,24 +1,11 @@
 {
   ".": {
-    "protocol": "http",
-    "uri": "127.0.0.1",
-    "port": "3000"
-  },
-  "astro": {
     "protocol": "file",
-    "uri": "astro"
-  },
-  "qwik": {
-    "protocol": "file",
-    "uri": "qwik"
+    "uri": "sveltekitsite"
   },
   "yaytapi": {
     "protocol": "http",
     "uri": "127.0.0.1",
     "port": "8080"
-  },
-  "freetube": {
-    "protocol": "file",
-    "uri": "freetube"
   }
 }
