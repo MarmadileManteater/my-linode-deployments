@@ -64,7 +64,7 @@ jobs:
           workflow_conclusion: success
           branch: development
           path: .
-          repo: MarmadileManteater/SvelteKitSite
+          repo: MarmadileManteater/SvelteKitSiteStatic
           check_artifacts:  false
           search_artifacts: false
           skip_unpack: false
@@ -73,55 +73,11 @@ jobs:
       - name: 🤐 Unzip SvelteKitSite artifact 
         uses: montudor/action-zip@v1
         with:
-          args: unzip -qq MarmadileManteaterSvelte/build.zip -d ./artifacts/
+          args: unzip -qq MarmadileManteaterSvelteStatic/static-adapter.zip -d ./artifacts/
           
       - name: Rename artifact folder
         run: |
-          mv ./artifacts/build ./artifacts/sveltekitsite
-
-      - name: ⬇ Download QwikStaticSite artifact 
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          workflow: main.yml 
-          workflow_conclusion: success
-          branch: development
-          path: .
-          repo: MarmadileManteater/QwikStaticSite
-          check_artifacts:  false
-          search_artifacts: false
-          skip_unpack: false
-          if_no_artifact_found: fail
-
-      - name: 🤐 Unzip QwikStaticSite artifact 
-        run:
-          unzip -qq MarmadileManteaterQwik/marmadilemanteater.dev.zip -d ./dist
-
-      - name: Rename artifact folder
-        run: |
-          mv ./dist ./artifacts/public/qwik
-
-      - name: ⬇ Download AstroVueStaticSite artifact 
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          workflow: main.yml 
-          workflow_conclusion: success
-          branch: development
-          path: .
-          repo: MarmadileManteater/AstroVueStaticSite
-          check_artifacts:  false
-          search_artifacts: false
-          skip_unpack: false
-          if_no_artifact_found: fail
-          
-      - name: 🤐 Unzip AstroVueStaticSite artifact 
-        run:
-          unzip -qq MarmadileManteaterAstroVue/dist.zip -d ./dist
-          
-      - name: Rename artifact folder
-        run: |
-          mv ./dist/* ./artifacts/public/astro
+          mv ./artifacts/static-adapter ./artifacts/public/sveltekitsite
 
       - name: 🚚 Move data.json to artifact folder
         run: |
@@ -155,21 +111,13 @@ jobs:
           ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'rm marmadilemanteater.dev -r'
           ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'unzip -qq artifacts.zip -d .'
           ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'mv artifacts marmadilemanteater.dev'
-          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'ln -s ~/marmadilemanteater.dev/public/freetube/ ~/marmadilemanteater.dev/public/qwik/freetube'
-          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'ln -s ~/marmadilemanteater.dev/public/freetube/ ~/marmadilemanteater.dev/public/astro/freetube'
-          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'ln -s ~/marmadilemanteater.dev/public/freetube/ ~/marmadilemanteater.dev/sveltekitsite/client/freetube'
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'ln -s ~/marmadilemanteater.dev/public/freetube/ ~/marmadilemanteater.dev/public/sveltekitsite/freetube'
           ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'rm artifacts.zip'
           
       - name: 🔓 Allow simple_rust_site to be executed
         run: |
           ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'cd marmadilemanteater.dev && chmod +x simple_rust_site'
        
-      - name: ✨ Start tmux session for SvelteKitSite
-        run: |
-          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux new -d -s svelte-kit-site"
-          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsvelte-kit-site 'cd marmadilemanteater.dev/sveltekitsite' Enter"
-          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} " tmux send-keys -tsvelte-kit-site ' node .' Enter" 
-          
       - name: ✨ Start tmux session for SimpleReverseProxy
         run: |
           ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux new -d -s simple-rust-site"
