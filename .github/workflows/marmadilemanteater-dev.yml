@@ -106,31 +106,31 @@ jobs:
       - name: Add known hosts
         run: ssh-keyscan -H ${{ secrets.LINODE_IP_ADDRESS }} >> ~/.ssh/known_hosts
         
-#      - name: 🚀 Deploy with scp
-#        run: scp artifacts.zip ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }}:~/
+      - name: 🚀 Deploy with scp
+        run: scp artifacts.zip ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }}:~/
       
-#      - name: 🪓 Kill any running tmux sessions on my linode
-#        continue-on-error: true
-#        run: |
-#          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'tmux kill-session -tsvelte-kit-site'
-#          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'tmux kill-session -tsimple-rust-site'
+      - name: 🪓 Kill any running tmux sessions on my linode
+        continue-on-error: true
+        run: |
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'tmux kill-session -tsvelte-kit-site'
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'tmux kill-session -tsimple-rust-site'
        
-#      - name: 🤐 Unzip the artifacts on my linode
-#        run: |
-#          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'rm marmadilemanteater.dev -r'
-#          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'unzip -qq artifacts.zip -d .'
-#          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'mv artifacts marmadilemanteater.dev'
-#          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'ln -s ~/marmadilemanteater.dev/public/freetube/ ~/marmadilemanteater.dev/public/sveltekitsite/freetube'
-#          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'rm artifacts.zip'
+      - name: 🤐 Unzip the artifacts on my linode
+        run: |
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'rm marmadilemanteater.dev -r'
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'unzip -qq artifacts.zip -d .'
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'mv artifacts marmadilemanteater.dev'
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'ln -s ~/marmadilemanteater.dev/public/freetube/ ~/marmadilemanteater.dev/public/sveltekitsite/freetube'
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'rm artifacts.zip'
           
-#      - name: 🔓 Allow simple_rust_site to be executed
-#        run: |
-#          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'cd marmadilemanteater.dev && chmod +x simple_rust_site'
+      - name: 🔓 Allow simple_rust_site to be executed
+        run: |
+          ssh -t ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'cd marmadilemanteater.dev && chmod +x simple_rust_site'
        
-#      - name: ✨ Start tmux session for SimpleReverseProxy
-#        run: |
-#          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux new -d -s simple-rust-site"
-#          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsimple-rust-site 'cd marmadilemanteater.dev' Enter"
-#          # this is a little hacky, but it is important to note I am avoiding accidentally storing the agent's password in `.bash_history` by putting a space before the commands
-#          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} " echo \"${{ secrets.SUDO_PASSWORD }}\" >> password.txt "
-#          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'tmux send-keys -tsimple-rust-site " sudo -S <<< \"\$(cat ../password.txt)\" ./simple_rust_site ../fullchain.pem ../privkey.pem ./data.json" Enter && sleep 2s && rm password.txt'
+      - name: ✨ Start tmux session for SimpleReverseProxy
+        run: |
+          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux new -d -s simple-rust-site"
+          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} "tmux send-keys -tsimple-rust-site 'cd marmadilemanteater.dev' Enter"
+          # this is a little hacky, but it is important to note I am avoiding accidentally storing the agent's password in `.bash_history` by putting a space before the commands
+          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} " echo \"${{ secrets.SUDO_PASSWORD }}\" >> password.txt "
+          ssh -tt ${{ secrets.SSH_USER }}@${{ secrets.LINODE_IP_ADDRESS }} 'tmux send-keys -tsimple-rust-site " sudo -S <<< \"\$(cat ../password.txt)\" ./simple_rust_site ../fullchain.pem ../privkey.pem ./data.json" Enter && sleep 2s && rm password.txt'
