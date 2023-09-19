@@ -5,7 +5,7 @@ name: 🚀 Deploy `marmadilemanteater.dev`
 # Controls when the workflow will run
 on:
   schedule:
-    - cron: "25 0 * * *"
+    - cron: "40 0 * * *"
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
